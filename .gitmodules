@@ -13,9 +13,15 @@
 [submodule "frida-node"]
 	path = frida-node
 	url = git://github.com/frida/frida-node.git
+[submodule "frida-swift"]
+	path = frida-swift
+	url = git://github.com/frida/frida-swift.git
 [submodule "frida-clr"]
 	path = frida-clr
 	url = git://github.com/frida/frida-clr.git
 [submodule "frida-qml"]
 	path = frida-qml
 	url = git://github.com/frida/frida-qml.git
+[submodule "releng/meson"]
+	path = releng/meson
+	url = git://github.com/frida/meson.git

@@ -1,16 +1,18 @@
+include config.mk
+
 MAKE_J ?= -j 8
 repo_base_url = "git://github.com/frida"
 repo_suffix = ".git"
 
-m4_version := 1.4.17
+m4_version := 1.4.18
 autoconf_version := 2.69
-automake_version := 1.15
+automake_version := 1.15.1
 libtool_version := 2.4.6
-gettext_version := 0.19.4
-pkg_config_version := 0.28
+gettext_version := 0.19.8.1
+pkg_config_version := 0.29.2
 
 
-build_platform := $(shell uname -s | tr '[A-Z]' '[a-z]' | sed 's,^darwin$$,mac,')
+build_platform := $(shell uname -s | tr '[A-Z]' '[a-z]' | sed 's,^darwin$$,macos,')
 build_arch := $(shell releng/detect-arch.sh)
 build_platform_arch := $(build_platform)-$(build_arch)
 
@@ -41,7 +43,7 @@ endif
 ifeq ($(host_platform), android)
 strip_all := --strip-all
 endif
-ifeq ($(host_platform), mac)
+ifeq ($(host_platform), macos)
 strip_all := -Sx
 endif
 ifeq ($(host_platform), ios)
@@ -49,14 +51,14 @@ strip_all := -Sx
 endif
 
 
-ifeq ($(host_platform), mac)
+ifeq ($(host_platform), macos)
 	dpkg_deb := build/ft-%/bin/dpkg-deb
 endif
 
 
 all: build/toolchain-$(host_platform)-$(host_arch).tar.bz2
 	@echo ""
-	@echo "\033[0;32mSuccess!\033[0;39m Here's your toolchain: \033[1m$<\033[0m"
+	@echo -e "\033[0;32mSuccess!\033[0;39m Here's your toolchain: \033[1m$<\033[0m"
 	@echo ""
 	@echo "It will be picked up automatically if you now proceed to build Frida."
 	@echo ""
@@ -121,6 +123,12 @@ build/.$1-stamp:
 	$(RM) -r $1
 	mkdir -p $1
 	$(download) $2 | tar -C $1 -xz --strip-components 1
+	if [ -n "$5" ]; then \
+		cd $1; \
+		for patch in $5; do \
+			patch -p1 < ../releng/patches/$$$$patch; \
+		done; \
+	fi
 	@mkdir -p $$(@D)
 	@touch $$@
 
@@ -168,7 +176,7 @@ $2: build/ft-env-%.rc build/ft-tmp-%/$1/Makefile
 endef
 
 
-$(eval $(call make-tarball-module-rules,m4,http://gnuftp.uib.no/m4/m4-$(m4_version).tar.gz,build/ft-%/bin/m4,))
+$(eval $(call make-tarball-module-rules,m4,http://gnuftp.uib.no/m4/m4-$(m4_version).tar.gz,build/ft-%/bin/m4,,m4-vasnprintf-apple-fix.patch))
 
 $(eval $(call make-tarball-module-rules,autoconf,http://gnuftp.uib.no/autoconf/autoconf-$(autoconf_version).tar.gz,build/ft-%/bin/autoconf,build/ft-%/bin/m4))
 
@@ -201,13 +209,13 @@ build/ft-%/bin/libtool: build/ft-env-%.rc build/ft-tmp-%/libtool/Makefile
 		&& make $(MAKE_J) install
 	@touch $@
 
-$(eval $(call make-tarball-module-rules,gettext,http://gnuftp.uib.no/gettext/gettext-$(gettext_version).tar.gz,build/ft-%/bin/autopoint,build/ft-%/bin/libtool))
+$(eval $(call make-tarball-module-rules,gettext,http://gnuftp.uib.no/gettext/gettext-$(gettext_version).tar.gz,build/ft-%/bin/autopoint,build/ft-%/bin/libtool,gettext-vasnprintf-apple-fix.patch))
 
 $(eval $(call make-git-module-rules,libffi,build/ft-%/lib/pkgconfig/libffi.pc,build/ft-%/bin/autopoint))
 
 $(eval $(call make-git-module-rules,glib,build/ft-%/bin/glib-genmarshal,build/ft-%/lib/pkgconfig/libffi.pc))
 
-$(eval $(call make-tarball-module-rules,pkg-config,http://pkgconfig.freedesktop.org/releases/pkg-config-$(pkg_config_version).tar.gz,build/ft-%/bin/pkg-config,build/ft-%/bin/glib-genmarshal))
+$(eval $(call make-tarball-module-rules,pkg-config,https://pkgconfig.freedesktop.org/releases/pkg-config-$(pkg_config_version).tar.gz,build/ft-%/bin/pkg-config,build/ft-%/bin/glib-genmarshal,pkg-config-static-glib.patch))
 
 $(eval $(call make-git-module-rules,vala,build/ft-%/bin/valac,build/ft-%/bin/glib-genmarshal))
 
@@ -220,7 +228,13 @@ build/ft-%/bin/dpkg-deb:
 
 
 build/ft-env-%.rc:
-	FRIDA_ENV_NAME=ft FRIDA_ENV_SDK=none FRIDA_HOST=$* ./releng/setup-env.sh
+	FRIDA_HOST=$* \
+		FRIDA_OPTIMIZATION_FLAGS="$(FRIDA_OPTIMIZATION_FLAGS)" \
+		FRIDA_DEBUG_FLAGS="$(FRIDA_DEBUG_FLAGS)" \
+		FRIDA_ASAN=$(FRIDA_ASAN) \
+		FRIDA_ENV_NAME=ft \
+		FRIDA_ENV_SDK=none \
+		./releng/setup-env.sh
 
 
 .PHONY: all

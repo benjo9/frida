@@ -1,22 +1,25 @@
-Inject JavaScript to explore native apps on Windows, Mac, Linux, iOS, Android, and QNX.
+Inject JavaScript to explore native apps on Windows, macOS, Linux, iOS, Android, and QNX.
+
+Two ways to install—
 ===
 
-## Installing from prebuilt binaries
+## 1. Install from prebuilt binaries
 
 This is the recommended way to get started. All you need to do is:
 
-    pip install frida # CLI tools and Python bindings
-    npm install frida # Node.js bindings
+    pip install --user frida    # CLI tools and Python bindings
+    npm install frida           # Node.js bindings
 
 You may also download pre-built binaries for various operating systems from
-[http://build.frida.re/frida/](http://build.frida.re/frida/).
+[https://build.frida.re/frida/](https://build.frida.re/frida/).
 
-## Building
+## 2. Build your own binaries
 
 ### Dependencies
 
-For running the Frida tools (`frida`, `frida-ls-devices`, `frida-ps`,
-`frida-trace`, and `frida-discover`) you need Python plus a few packages:
+For running the Frida CLI tools, i.e. `frida`, `frida-ls-devices`, `frida-ps`,
+`frida-kill`, `frida-trace`, and `frida-discover`, you need Python plus a
+few packages:
 
     pip3 install colorama prompt-toolkit pygments
 
@@ -24,7 +27,7 @@ For running the Frida tools (`frida`, `frida-ls-devices`, `frida-ps`,
 
     make
 
-### Mac and iOS
+### macOS and iOS
 
 First make a trusted code-signing certificate. You can use the guide at
 https://sourceware.org/gdb/wiki/BuildingOnDarwin in the section
@@ -38,7 +41,7 @@ variables `MAC_CERTID` and `IOS_CERTID` and run `make`:
     export IOS_CERTID=frida-cert
     make
 
-To ensure that OS X accepts the newly created certificate, restart the
+To ensure that macOS accepts the newly created certificate, restart the
 `taskgated` daemon:
 
     sudo killall taskgated
@@ -47,11 +50,11 @@ To ensure that OS X accepts the newly created certificate, restart the
 
     frida.sln
 
-(Requires Visual Studio 2013.)
+(Requires Visual Studio 2017.)
 
-See [http://www.frida.re/docs/building/](http://www.frida.re/docs/building/)
+See [https://www.frida.re/docs/building/](https://www.frida.re/docs/building/)
 for details.
 
 ## Learn more
 
-Have a look at our [documentation](http://www.frida.re/docs/home/).
+Have a look at our [documentation](https://www.frida.re/docs/home/).

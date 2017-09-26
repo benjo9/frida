@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-core", "frida-core\frida-core.vcxproj", "{B7DC9B02-A5FF-4AA1-B2A2-DC1653168D44}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -11,7 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-core", "frida-core\fr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-tests", "frida-core\tests\frida-tests.vcxproj", "{BCCDA8EB-F0DF-4DD0-B233-7410079531AB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resource-compiler", "frida-core\tools\resource-compiler.vcxproj", "{81B3E411-8676-41EB-84C6-1E5307F0C5FF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-resource-compiler", "frida-core\tools\frida-resource-compiler.vcxproj", "{81B3E411-8676-41EB-84C6-1E5307F0C5FF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-builddeps", "releng\frida-builddeps.vcxproj", "{4AFCE7C4-6D9A-4663-B43C-D2E518486910}"
 EndProject
@@ -41,7 +41,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-clr", "frida-clr\frid
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-python27", "frida-python\frida-python27.vcxproj", "{7409F45B-E10E-48AA-9E68-94C113995D4A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-python35", "frida-python\frida-python35.vcxproj", "{7505F884-DD69-4F23-ADE6-1E0E049AB018}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-python36", "frida-python\frida-python36.vcxproj", "{7505F884-DD69-4F23-ADE6-1E0E049AB018}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-pipe-32", "frida-core\lib\pipe\frida-pipe-32.vcxproj", "{4C39C3CF-13E5-4346-B6AE-F73013105936}"
 EndProject
@@ -52,6 +52,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "capstone-64", "capstone\capstone-64.vcxproj", "{3D5DFA8A-628C-40CC-86D7-078F72833309}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gumpp-static", "frida-gum\bindings\gumpp\gumpp-static.vcxproj", "{905F6909-645E-44B4-BA25-D3481B4DF985}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "frida-gadget", "frida-core\frida-gadget.vcxproj", "{5DBC3541-98D6-4F06-A184-B6116544ED26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -245,6 +247,14 @@ Global
 		{905F6909-645E-44B4-BA25-D3481B4DF985}.Release|Win32.Build.0 = Release|Win32
 		{905F6909-645E-44B4-BA25-D3481B4DF985}.Release|x64.ActiveCfg = Release|x64
 		{905F6909-645E-44B4-BA25-D3481B4DF985}.Release|x64.Build.0 = Release|x64
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Debug|Win32.Build.0 = Debug|Win32
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Debug|x64.ActiveCfg = Debug|x64
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Debug|x64.Build.0 = Debug|x64
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Release|Win32.ActiveCfg = Release|Win32
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Release|Win32.Build.0 = Release|Win32
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Release|x64.ActiveCfg = Release|x64
+		{5DBC3541-98D6-4F06-A184-B6116544ED26}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
