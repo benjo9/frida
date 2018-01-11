@@ -1,4 +1,7 @@
-Inject JavaScript to explore native apps on Windows, macOS, Linux, iOS, Android, and QNX.
+# Frida
+
+Dynamic instrumentation toolkit for developers, reverse-engineers, and security
+researchers.
 
 Two ways to install—
 ===

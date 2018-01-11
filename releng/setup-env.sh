@@ -138,8 +138,8 @@ fi
 
 prompt_color=33
 
-toolchain_version=20170924
-sdk_version=20170922
+toolchain_version=20171201
+sdk_version=20171201
 if [ $enable_asan = yes ]; then
   sdk_version="$sdk_version-asan"
 fi
@@ -159,6 +159,7 @@ FRIDA_PREFIX_LIB="$FRIDA_PREFIX/lib"
 FRIDA_TOOLROOT="$FRIDA_BUILD/${frida_env_name_prefix}toolchain-${build_platform_arch}"
 FRIDA_SDKROOT="$FRIDA_BUILD/${frida_env_name_prefix}sdk-${host_platform_arch}"
 
+GCC=""
 LIBTOOL=""
 STRIP_FLAGS=""
 
@@ -456,6 +457,7 @@ case $host_platform in
 
     CPP="$android_gcc_toolchain/bin/${android_host_toolprefix}cpp --sysroot=$android_sysroot_compile -isystem $android_sysinc"
     CC="$cc_wrapper $android_clang_prefix/bin/clang $toolflags"
+    GCC="$cc_wrapper $android_gcc_toolchain/bin/${android_host_toolprefix}gcc"
     CXX="$cxx_wrapper $android_clang_prefix/bin/clang++ $toolflags"
     LD="$android_gcc_toolchain/bin/${android_host_toolprefix}ld --sysroot=$android_sysroot_link"
 
@@ -468,7 +470,6 @@ case $host_platform in
     OBJDUMP="$android_gcc_toolchain/bin/${android_host_toolprefix}objdump"
 
     CFLAGS="$android_host_cflags \
--fPIE \
 -ffunction-sections -fdata-sections \
 -DANDROID -D__ANDROID_API__=$android_target_platform"
     CXXFLAGS="\
@@ -478,7 +479,6 @@ case $host_platform in
 -I$ANDROID_NDK_ROOT/sources/android/support/include"
     CPPFLAGS="-DANDROID -D__ANDROID_API__=$android_target_platform"
     LDFLAGS="$android_host_ldflags \
--fPIE -pie \
 -Wl,--gc-sections \
 -Wl,-z,noexecstack \
 -Wl,-z,relro \
@@ -601,6 +601,19 @@ $arch_linker_args"
 
     meson_c_link_args="$base_linker_args"
     meson_cpp_link_args="$base_linker_args, '-static-libstdc++', '-L$(dirname $qnx_sysroot/lib/gcc/4.8.3/libstdc++.a)'"
+    ;;
+esac
+
+case $host_platform_arch in
+  android-arm|ios-arm)
+    meson_c_args="$meson_c_args, '-mthumb'"
+    meson_cpp_args="$meson_cpp_args, '-mthumb'"
+    if [ -n "$meson_objc" ]; then
+      meson_objc_args="$meson_objc_args, '-mthumb'"
+    fi
+    if [ -n "$meson_objcpp" ]; then
+      meson_objcpp_args="$meson_objcpp_args, '-mthumb'"
+    fi
     ;;
 esac
 
@@ -794,6 +807,9 @@ fi
   echo "export CPP=\"$CPP\""
   echo "export CPPFLAGS=\"$CPPFLAGS\""
   echo "export CC=\"$CC\""
+  if [ -n "$GCC" ]; then
+    echo "export FRIDA_GCC=\"$GCC\""
+  fi
   echo "export CFLAGS=\"$CFLAGS\""
   echo "export CXX=\"$CXX\""
   echo "export CXXFLAGS=\"$CXXFLAGS\""
